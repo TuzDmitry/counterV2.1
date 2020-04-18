@@ -6,15 +6,18 @@ class ControlPanelUser extends React.Component {
     render = () => {
 
         ///деструктуризация объекта
-        const {maxValue: maxV, minValue: minV, memoryValue: memo, isDisabledSet} = this.props.state;
+        const {maxValue: maxV, minValue: minV, memoryValue: memo, isDisabledSet,settingMode} = this.props.state;
 
-        let setDisabledForInc = (memo === maxV) || !isDisabledSet || (maxV <= minV || minV < 0 || maxV < 0) ? true : false;
-        let setDisabledForReset = (minV === memo) || !isDisabledSet || (maxV <= minV || minV < 0 || maxV < 0) ? true : false;
+        let setDisabledForInc = (memo === maxV) ? true : false;
+        let setDisabledForReset = (minV === memo) ? true : false;
 
         return (
             <div className="controlPanel">
-                <Button setDisabled={setDisabledForInc} name={'inc'} onClickFunc={this.props.incCounter}/>
-                <Button setDisabled={setDisabledForReset} name={'reset'} onClickFunc={this.props.resetToZero}/>
+
+                {!settingMode&&<Button setDisabled={setDisabledForInc} name={'inc'} onClickFunc={this.props.incCounter}/>}
+                {!settingMode&&<Button setDisabled={setDisabledForReset} name={'reset'} onClickFunc={this.props.resetToZero}/>}
+                {/*<Button name={'set'} onClickFunc={this.props.setSettings}/>*/}
+                <Button name={'set'} setDisabled={isDisabledSet} onClickFunc={this.props.switchMode}/>
             </div>
         );
     }

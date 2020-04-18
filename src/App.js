@@ -15,6 +15,7 @@ class App extends React.Component {
         maxValue: 5,
         memoryValue: 0,
         isDisabledSet: true,
+        settingMode: false
         // isDisabledSet: true-когда кнопка SET недоступна для нажатия
     };
     ///// метод, который будет брать текущий стейт и… сохранять его в localStorage
@@ -48,9 +49,20 @@ class App extends React.Component {
         }
     }
 
-    setSettings = () => {
-        this.setState({isDisabledSet: true, memoryValue: this.state.minValue}, this.saveState)
+
+    switchMode = () => {
+        debugger
+        switch (this.state.settingMode) {
+            case true:
+                if(!this.state.isDisabledSet){this.setState({memoryValue: this.state.minValue,settingMode: false}, this.saveState)}
+                break;
+            case false:
+                this.setState({settingMode: true})
+                break;
+        }
     }
+
+
 
     adjustValueMax = (value) => {
         this.setState({maxValue: value, isDisabledSet: false}, this.saveState)
@@ -69,14 +81,17 @@ class App extends React.Component {
     render = () => {
         return (
             <div className="container">
-                <ComponentConfig state={this.state}
-                                 adjustValueMin={this.adjustValueMin}
-                                 adjustValueMax={this.adjustValueMax}
-                                 setSettings={this.setSettings}/>
+                {/*<ComponentConfig state={this.state}*/}
+                {/*                 adjustValueMin={this.adjustValueMin}*/}
+                {/*                 adjustValueMax={this.adjustValueMax}*/}
+                {/*                 setSettings={this.setSettings}/>*/}
 
                 <ComponentUser state={this.state}
                                incCounter={this.incCounter}
-                               resetToZero={this.resetToZero}/>
+                               resetToZero={this.resetToZero}
+                               switchMode={this.switchMode}
+                               adjustValueMin={this.adjustValueMin}
+                               adjustValueMax={this.adjustValueMax}/>
             </div>
         );
     }

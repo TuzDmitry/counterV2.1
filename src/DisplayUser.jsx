@@ -1,6 +1,15 @@
 import React from 'react';
+import ComponentInstaller from "./ComponentInstaller";
 
 class DisplayUser extends React.Component {
+    onChangeValueMax = (e) => {
+        let value = parseInt(e.currentTarget.value)
+        this.props.adjustValueMax(value)
+    }
+    onChangeValueMin = (e) => {
+        let value = parseInt(e.currentTarget.value)
+        this.props.adjustValueMin(value)
+    }
 
     render = () => {
         // let maxV = this.props.state.maxValue;
@@ -9,27 +18,36 @@ class DisplayUser extends React.Component {
         //let isDisabledSet=this.props.state.isDisabledSet;
 
         ///деструктуризация объекта
-        const {maxValue: maxV, minValue: minV, memoryValue: memo, isDisabledSet} = this.props.state;
+        const {maxValue: maxV, minValue: minV, memoryValue: memo, isDisabledSet, settingMode} = this.props.state;
 
 
         let classRedForDisplay = memo === maxV ? "filter-red" : "";
-        /// isDisabledSet: true-когда кнопка SET недоступна для нажатия
-        let isSucsess = isDisabledSet && (maxV > minV) && (minV >= 0);
-        let isSettigs = !isDisabledSet && (maxV > minV) && (minV >= 0);
-        let isError = (maxV <= minV || minV < 0 || maxV < 0);
+        // /// isDisabledSet: true-когда кнопка SET недоступна для нажатия
+        // let isSucsess = isDisabledSet && (maxV > minV) && (minV >= 0);
+        // let isSettigs = !isDisabledSet && (maxV > minV) && (minV >= 0);
+        // let isError = (maxV <= minV || minV < 0 || maxV < 0);
 
         ///is Sucsess. is Error is Settigs
+        let classRedForMaxValue = (maxV <= minV || maxV < 0) ? "input-red" : "";
+        let classRedForMinValue = (maxV <= minV || minV < 0) ? "input-red" : "";
 
 
         return (
             <div className={`display`}>
+                {settingMode &&
+                    <>
+                        <ComponentInstaller nameInstaller={"max value:"}
+                                            value={maxV}
+                                            onChangeFunc={this.onChangeValueMax}
+                                            classRed={classRedForMaxValue}/>
+                        <ComponentInstaller nameInstaller={"start value:"}
+                                            value={minV}
+                                            onChangeFunc={this.onChangeValueMin}
+                                            classRed={classRedForMinValue}/>
+                    </>
+                }
 
-                {isSucsess && <span className={`numb ${classRedForDisplay}`}>{memo}</span>}
-                {/*{!this.props.state.isDisabledSet &&*/}
-                {isSettigs && <span className="message">enter values and press 'set'</span>}
-
-                {isError && <span className="filter-red">incorrect value</span>}
-
+                {!settingMode && <span className={`numb ${classRedForDisplay}`}>{memo}</span>}
             </div>
         );
     }
