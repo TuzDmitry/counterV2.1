@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import ComponentUser from "./ComponentUser";
-import ComponentConfig from "./ComponentConfig";
+import ComponentBox from "./ComponentBox";
+
 const counter_state = "counter_state";
 
 class App extends React.Component {
@@ -14,9 +14,7 @@ class App extends React.Component {
         minValue: 0,
         maxValue: 5,
         memoryValue: 0,
-        isDisabledSet: true,
         settingMode: false
-        // isDisabledSet: true-когда кнопка SET недоступна для нажатия
     };
     ///// метод, который будет брать текущий стейт и… сохранять его в localStorage
     saveState = () => {
@@ -34,8 +32,6 @@ class App extends React.Component {
             let state = JSON.parse(stateAsString);
             this.setState(state)
         }
-////устанавливаем стейт или пустой или востановленный в стейт
-
     }
 
     resetToZero = () => {
@@ -49,12 +45,11 @@ class App extends React.Component {
         }
     }
 
-
     switchMode = () => {
         debugger
         switch (this.state.settingMode) {
             case true:
-                if(!this.state.isDisabledSet){this.setState({memoryValue: this.state.minValue,settingMode: false}, this.saveState)}
+                this.setState({memoryValue: this.state.minValue, settingMode: false}, this.saveState)
                 break;
             case false:
                 this.setState({settingMode: true})
@@ -62,36 +57,22 @@ class App extends React.Component {
         }
     }
 
-
-
     adjustValueMax = (value) => {
-        this.setState({maxValue: value, isDisabledSet: false}, this.saveState)
-        if ((value < 0) || (value <= this.state.minValue)) {
-            this.setState({isDisabledSet: true}, this.saveState)
-        }
+        this.setState({maxValue: value}, this.saveState)
     }
     adjustValueMin = (value) => {
-        this.setState({minValue: value, isDisabledSet: false}, this.saveState)
-        if ((value < 0) || (value >= this.state.maxValue)) {
-            this.setState({isDisabledSet: true}, this.saveState)
-        }
+        this.setState({minValue: value}, this.saveState)
     }
-
 
     render = () => {
         return (
             <div className="container">
-                {/*<ComponentConfig state={this.state}*/}
-                {/*                 adjustValueMin={this.adjustValueMin}*/}
-                {/*                 adjustValueMax={this.adjustValueMax}*/}
-                {/*                 setSettings={this.setSettings}/>*/}
-
-                <ComponentUser state={this.state}
-                               incCounter={this.incCounter}
-                               resetToZero={this.resetToZero}
-                               switchMode={this.switchMode}
-                               adjustValueMin={this.adjustValueMin}
-                               adjustValueMax={this.adjustValueMax}/>
+                <ComponentBox state={this.state}
+                              incCounter={this.incCounter}
+                              resetToZero={this.resetToZero}
+                              switchMode={this.switchMode}
+                              adjustValueMin={this.adjustValueMin}
+                              adjustValueMax={this.adjustValueMax}/>
             </div>
         );
     }
